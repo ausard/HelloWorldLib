@@ -6,6 +6,9 @@ pipeline {
     options {
         timestamps()
     }
+    parameters {
+       booleanParam defaultValue: false, description: 'Is increment version library?', name: 'isIncrementVersion'
+   }
     stages {
         stage("Prepare Ws") {
             steps {
@@ -19,7 +22,12 @@ pipeline {
         }
         stage("Build lib and publish to the nexus") {
             steps {
-                sh './gradlew clean build publish'                
+              script{
+                if (isIncrementVersion){
+                  sh './gradlew incrementVersion'
+                }
+              }
+              sh './gradlew clean build publish'
             }
         }
     }

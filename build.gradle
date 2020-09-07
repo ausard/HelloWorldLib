@@ -27,15 +27,31 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
-version = '0.0.2'
 group = 'hw.libs.common'
 sourceCompatibility = '1.8'
+
+task incrementVersion {
+  doLast {
+    print 'This will increase version '
+    print project.property('version')
+    def v = project.property('version')
+    print ' => '
+    def (majorVersion, minorVersion, buildVersion) = v.split("\\.").collect { it.toInteger() }
+    buildVersion++
+    def resVersion =  majorVersion+'.'+minorVersion+'.'+buildVersion
+    println resVersion
+    ant.propertyfile(file: "gradle.properties") {
+        entry(key: "version", value: resVersion)
+    }
+    print 'and write to gradle.properties file'
+  }
+}
 
 apply plugin: 'maven-publish'
 publishing {
     publications {
         maven(MavenPublication) {
-            artifact("build/libs/helloworldlib-$version" + ".jar") {
+            artifact("build/libs/helloworldlib-"+ project.version + ".jar") {
                 extension 'jar'
             }
         }
