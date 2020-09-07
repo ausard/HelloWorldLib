@@ -7,9 +7,8 @@ pipeline {
         timestamps()
     }
     parameters {
-      booleanParam defaultValue: true, description: 'Is increment version library?', name: 'isIncrementVersion'
-      booleanParam defaultValue: true, description: 'Is publish library\'s build to the nexus?', name: 'isPublish'
-
+      booleanParam defaultValue: true, description: 'Increment version library', name: 'isIncrementVersion'
+      // booleanParam defaultValue: true, description: 'Is publish library\'s build to the nexus?', name: 'isPublish'
     }
     stages {
         stage("Prepare Ws") {
@@ -24,7 +23,7 @@ pipeline {
         }
         stage("increment version lib"){
           steps{
-            // sh "echo {$params.isIncrementVersion}"
+            sh "echo {$params.isIncrementVersion}"
             script{
               if (isIncrementVersion == true){
                 sh './gradlew incrementVersion'
@@ -47,7 +46,7 @@ pipeline {
               }
             }
             steps {
-              // sh "echo {$params.isPublish}"
+              sh "echo {$params.isPublish}"
               script{
                 if (isPublish == true){
                   sh './gradlew publish'
@@ -65,7 +64,7 @@ pipeline {
               sh 'git add gradle.properties'
               sh 'git config --global user.name "ausard"'
               sh 'git config --global user.email "ausard@yandex.ru"'
-              sh 'git commit -m "Version lib changed to '+versionString+'"'
+              sh 'git commit -m "Version lib changed to ' + versionString + '"'
               withCredentials([usernamePassword(credentialsId: 'git', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'git push --set-upstream https://$USERNAME:$PASSWORD@github.com/ausard/HelloWorldLib.git'
                 sh 'git tag '+versionString
