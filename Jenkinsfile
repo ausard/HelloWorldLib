@@ -7,8 +7,8 @@ pipeline {
         timestamps()
     }
     parameters {
-      booleanParam defaultValue: false, description: 'Is increment version library?', name: 'isIncrementVersion'
-      booleanParam defaultValue: false, description: 'Is publish build library to the nexus?', name: 'isPublish'
+      booleanParam defaultValue: true, description: 'Is increment version library?', name: 'isIncrementVersion'
+      booleanParam defaultValue: true, description: 'Is publish library\'s build to the nexus?', name: 'isPublish'
     }
     stages {
         stage("Prepare Ws") {
