@@ -36,20 +36,20 @@ pipeline {
               sh './gradlew clean build'
             }
         }
-        stage('Example') {
+        stage('Publish lib build to the Nexus') {            
             input {
-                message "Should you've publish lib?"
-                ok "Yes, we should."
-                submitter ""
-                parameters {
-                    booleanParam defaultValue: true, description: 'Is publish library build to the nexus?', name: 'isPublish'
-                }
+              message "Should you've publish lib?"
+              ok 'Yes'
+              submitterParameter 'isPublish'
+              parameters {
+                booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
+              }
             }
             steps {
               script{
                 if (isPublish == true){
                   sh './gradlew publish'
-                }                
+                }
               }
             }
         }
