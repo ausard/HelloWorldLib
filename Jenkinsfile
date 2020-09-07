@@ -56,9 +56,8 @@ pipeline {
             }
         }
         stage('Commit changes on git'){
-          steps{
-            def versionString
-            def properties = readProperties  file: 'gradle.properties'
+          steps{            
+            properties = readProperties  file: 'gradle.properties'
             versionString = properties."version"
             echo 'This will sync changes on git'
             sh 'git add gradle.properties'
