@@ -33,8 +33,8 @@ sourceCompatibility = '1.8'
 task incrementVersion {
   doLast {
     print 'This will increase version '
-    print project.property('version')
-    def v = project.property('version')
+    print project.version
+    def v = project.version
     print ' => '
     def (majorVersion, minorVersion, buildVersion) = v.split("\\.").collect { it.toInteger() }
     buildVersion++
