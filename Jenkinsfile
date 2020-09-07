@@ -8,7 +8,7 @@ pipeline {
     }
     parameters {
       booleanParam defaultValue: false, description: 'Increment version library', name: 'isIncrementVersion'
-      // booleanParam defaultValue: true, description: 'Is publish library\'s build to the nexus?', name: 'isPublish'
+      booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
     }
     stages {
         stage("Prepare Ws") {
@@ -38,24 +38,24 @@ pipeline {
         }
         stage('Publish lib build to the Nexus') {
             steps {
-              timeout(time: 30, unit: 'SECONDS'){
                 script{
-                  def INPUT_PARAMS = input message :"Should you've publish lib?",
-                    ok : 'Yes',
-                    parameters :[
-                    booleanParam(name: 'isPublish', defaultValue: false, description: 'Is publish library build to the nexus?')                    
-                    ]
-                  sh "echo {$INPUT_PARAMS.isPublish}"
-                  if (INPUT_PARAMS.isPublish == true){
+                  // def INPUT_PARAMS = input
+                  //   message :"Should you've publish lib?",
+                  //   ok : 'Yes',
+                  //   parameters :[
+                  //     booleanParam(name: 'isPublish', defaultValue: false, description: 'Is publish library build to the nexus?')
+                  //   ]
+                  sh "echo {$params.isPublish}"
+                  if (params.isPublish == true){
                     sh './gradlew publish'
                   }
                 }
-              }
             }
         }
         stage('Commit changes on git'){
           steps{
             script{
+
               properties = readProperties  file: 'gradle.properties'
               versionString = properties."version"
 
