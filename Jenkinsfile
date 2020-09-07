@@ -43,7 +43,7 @@ pipeline {
                   def INPUT_PARAMS = input message :"Should you've publish lib?",
                     ok : 'Yes',
                     parameters :[
-                    booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
+                    booleanParam(name: 'isPublish', defaultValue: false, description: 'Is publish library build to the nexus?')                    
                     ]
                   sh "echo {$INPUT_PARAMS.isPublish}"
                   if (INPUT_PARAMS.isPublish == true){
