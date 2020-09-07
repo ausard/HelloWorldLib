@@ -7,8 +7,9 @@ pipeline {
         timestamps()
     }
     parameters {
-       booleanParam defaultValue: false, description: 'Is increment version library?', name: 'isIncrementVersion'
-   }
+      booleanParam defaultValue: false, description: 'Is increment version library?', name: 'isIncrementVersion'
+      booleanParam defaultValue: false, description: 'Is publish build library to the nexus?', name: 'isPublish'
+    }
     stages {
         stage("Prepare Ws") {
             steps {
@@ -20,14 +21,27 @@ pipeline {
                 git 'https://github.com/ausard/HelloWorldLib.git'
             }
         }
-        stage("Build lib and publish to the nexus") {
+        stage("increment version lib"){
+          steps{
+            script{
+              if (isIncrementVersion == true){
+                sh './gradlew incrementVersion'
+              }
+            }
+          }
+        }
+        stage("Build lib") {
             steps {
-              script{
-                if (isIncrementVersion == true){
-                  sh './gradlew incrementVersion'
+              sh './gradlew clean build'
+            }
+            post{
+              success{
+                script{
+                  if (isPublish == true){
+                    sh './gradlew publish'
+                  }
                 }
               }
-              sh './gradlew clean build publish'
             }
         }
     }
