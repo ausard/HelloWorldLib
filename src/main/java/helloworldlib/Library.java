@@ -10,4 +10,7 @@ public class Library {
     public boolean someLibraryMethodNew() {
         return false;
     }
+    public String getText() {
+        return "Some Library Method Text";
+    }
 }

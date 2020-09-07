@@ -27,7 +27,7 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
-version = '0.0.1'
+version = '0.0.2'
 group = 'hw.libs.common'
 sourceCompatibility = '1.8'
 
