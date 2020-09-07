@@ -55,7 +55,7 @@ pipeline {
         stage('Commit changes on git'){
           steps{
             script{
-              if (params.isIncrementVersion == true and params.isPublish == true){
+              if ((params.isIncrementVersion == true) and (params.isPublish == true)){
                 properties = readProperties  file: 'gradle.properties'
                 versionString = properties."version"
 
