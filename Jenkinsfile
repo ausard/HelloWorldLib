@@ -25,7 +25,7 @@ pipeline {
           steps{
             sh "echo {$params.isIncrementVersion}"
             script{
-              if (isIncrementVersion == true){
+              if (params.isIncrementVersion == true){
                 sh './gradlew incrementVersion'
               }
             }
@@ -48,7 +48,7 @@ pipeline {
             steps {
               sh "echo {$params.isPublish}"
               script{
-                if (isPublish == true){
+                if (params.isPublish == true){
                   sh './gradlew publish'
                 }
               }
