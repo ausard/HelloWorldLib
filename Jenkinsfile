@@ -7,7 +7,7 @@ pipeline {
         timestamps()
     }
     parameters {
-      booleanParam defaultValue: true, description: 'Increment version library', name: 'isIncrementVersion'
+      booleanParam defaultValue: false, description: 'Increment version library', name: 'isIncrementVersion'
       // booleanParam defaultValue: true, description: 'Is publish library\'s build to the nexus?', name: 'isPublish'
     }
     stages {
@@ -36,22 +36,25 @@ pipeline {
               sh './gradlew clean build'
             }
         }
-        stage('Publish lib build to the Nexus') {
-            input {
-              message "Should you've publish lib?"
-              ok 'Yes'
-              submitterParameter 'isPublish'
-              parameters {
-                booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
-              }
-            }
+        stage('Publish lib build to the Nexus') {            
             steps {
-              sh "echo {$params.isPublish}"
-              script{
-                if (params.isPublish == true){
-                  sh './gradlew publish'
-                }
+              timeout(time: 30, unit: 'SECONDS'){
+                script{
+                  def INPUT_PARAMS = input :
+                    message "Should you've publish lib?",
+                    ok 'Yes',
+                    parameters {
+                      booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
+                    }
+                  sh "echo {$INPUT_PARAMS.isPublish}"
+                    script{
+                      if (INPUT_PARAMS.isPublish == true){
+                        sh './gradlew publish'
+                      }
+                    }
+                  }
               }
+
             }
         }
         stage('Commit changes on git'){
