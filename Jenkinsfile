@@ -23,7 +23,7 @@ pipeline {
         stage("Build lib and publish to the nexus") {
             steps {
               script{
-                if (isIncrementVersion){
+                if (isIncrementVersion == true){
                   sh './gradlew incrementVersion'
                 }
               }
