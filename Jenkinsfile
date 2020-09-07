@@ -9,6 +9,7 @@ pipeline {
     parameters {
       booleanParam defaultValue: true, description: 'Is increment version library?', name: 'isIncrementVersion'
       booleanParam defaultValue: true, description: 'Is publish library\'s build to the nexus?', name: 'isPublish'
+
     }
     stages {
         stage("Prepare Ws") {
@@ -34,13 +35,19 @@ pipeline {
             steps {
               sh './gradlew clean build'
             }
-            post{
-              success{
-                script{
-                  if (isPublish == true){
-                    sh './gradlew publish'
-                  }
+        }
+        stage('Example') {
+            input {
+                message "Should you've publish lib?"
+                ok "Yes, we should."
+                submitter ""
+                parameters {
+                    booleanParam defaultValue: true, description: 'Is publish library build to the nexus?', name: 'isPublish'
                 }
+            }
+            steps {
+              if (isPublish == true){
+                sh './gradlew publish'
               }
             }
         }
