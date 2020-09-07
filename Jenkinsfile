@@ -46,8 +46,10 @@ pipeline {
                 }
             }
             steps {
-              if (isPublish == true){
-                sh './gradlew publish'
+              script{
+                if (isPublish == true){
+                  sh './gradlew publish'
+                }                
               }
             }
         }
