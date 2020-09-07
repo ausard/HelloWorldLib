@@ -36,25 +36,21 @@ pipeline {
               sh './gradlew clean build'
             }
         }
-        stage('Publish lib build to the Nexus') {            
+        stage('Publish lib build to the Nexus') {
             steps {
               timeout(time: 30, unit: 'SECONDS'){
                 script{
-                  def INPUT_PARAMS = input :
-                    message "Should you've publish lib?",
-                    ok 'Yes',
-                    parameters {
-                      booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
-                    }
+                  def INPUT_PARAMS = input message :"Should you've publish lib?",
+                    ok : 'Yes',
+                    parameters :[
+                    booleanParam defaultValue: false, description: 'Is publish library build to the nexus?', name: 'isPublish'
+                    ]
                   sh "echo {$INPUT_PARAMS.isPublish}"
-                    script{
-                      if (INPUT_PARAMS.isPublish == true){
-                        sh './gradlew publish'
-                      }
-                    }
+                  if (INPUT_PARAMS.isPublish == true){
+                    sh './gradlew publish'
                   }
+                }
               }
-
             }
         }
         stage('Commit changes on git'){
